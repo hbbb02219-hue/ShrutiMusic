@@ -129,9 +129,9 @@ SPOTIFY_PLAYLIST_IMG_URL = "https://files.catbox.moe/eehxb4.jpg"
 # 🔑 Custom API Config
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-API_URL = getenv("API_URL", 'https://api.thequickearn.xyz')
-VIDEO_API_URL = getenv("VIDEO_API_URL", 'https://api.video.thequickearn.xyz')
-API_KEY = getenv("API_KEY", "NxGBNexGenBotse3faeb")
+API_URL = os.getenv("API_URL", 'https://api.thequickearn.xyz')
+VIDEO_API_URL = os.getenv("VIDEO_API_URL", 'https://api.video.thequickearn.xyz')
+API_KEY = os.getenv("API_KEY", "NxGBNexGenBotse3faeb")
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # 🔐 User & Bot State Stores
