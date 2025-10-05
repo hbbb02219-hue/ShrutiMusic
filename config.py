@@ -126,6 +126,13 @@ SPOTIFY_ALBUM_IMG_URL = "https://files.catbox.moe/eehxb4.jpg"
 SPOTIFY_PLAYLIST_IMG_URL = "https://files.catbox.moe/eehxb4.jpg"
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 🔑 Custom API Config
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+API_URL = os.getenv("API_URL", "https://api.thequickearn.xyz")
+API_KEY = os.getenv("API_KEY", "NxGBNexGenBotse3faeb")
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # 🔐 User & Bot State Stores
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -176,5 +183,4 @@ if SUPPORT_GROUP:
 # 📢 Telegram Channel : https://t.me/ShrutiBots
 # ===========================================
 
-
-# ❤️ Love From ShrutiBots 
+# ❤️ Love From ShrutiBots
