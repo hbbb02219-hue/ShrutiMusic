@@ -16,7 +16,7 @@ import random
 import logging
 import aiohttp
 import config
-from config import API_URL, VIDEO_API_URL, API_KEY
+ImportError: cannot import name 'VIDEO_API_URL' from 'config'
 
 
 def cookie_txt_file():
