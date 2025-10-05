@@ -15,8 +15,11 @@ import glob
 import random
 import logging
 import aiohttp
-import config
-ImportError: cannot import name 'VIDEO_API_URL' from 'config'
+from os import getenv
+
+API_URL = getenv("API_URL", 'https://api.thequickearn.xyz')
+VIDEO_API_URL = getenv("VIDEO_API_URL", 'https://api.video.thequickearn.xyz')
+API_KEY = getenv("API_KEY", "NxGBNexGenBotse3faeb")
 
 
 def cookie_txt_file():
@@ -39,7 +42,7 @@ async def download_song(link: str):
         if os.path.exists(file_path):
             #print(f"File already exists: {file_path}")
             return file_path
-
+        
     song_url = f"{API_URL}/song/{video_id}?api={API_KEY}"
     async with aiohttp.ClientSession() as session:
         for attempt in range(10):
@@ -47,7 +50,7 @@ async def download_song(link: str):
                 async with session.get(song_url) as response:
                     if response.status != 200:
                         raise Exception(f"API request failed with status code {response.status}")
-
+                
                     data = await response.json()
                     status = data.get("status", "").lower()
 
@@ -67,7 +70,7 @@ async def download_song(link: str):
         else:
             print("⏱️ Max retries reached. Still downloading...")
             return None
-
+    
 
         try:
             file_format = data.get("format", "mp3")
@@ -101,7 +104,7 @@ async def download_video(link: str):
         file_path = f"{download_folder}/{video_id}.{ext}"
         if os.path.exists(file_path):
             return file_path
-
+        
     video_url = f"{VIDEO_API_URL}/video/{video_id}?api={API_KEY}"
     async with aiohttp.ClientSession() as session:
         for attempt in range(10):
@@ -109,7 +112,7 @@ async def download_video(link: str):
                 async with session.get(video_url) as response:
                     if response.status != 200:
                         raise Exception(f"API request failed with status code {response.status}")
-
+                
                     data = await response.json()
                     status = data.get("status", "").lower()
 
@@ -129,7 +132,7 @@ async def download_video(link: str):
         else:
             print("⏱️ Max retries reached. Still downloading...")
             return None
-
+    
 
         try:
             file_format = data.get("format", "mp4")
@@ -161,7 +164,7 @@ async def check_file_size(link):
         if not cookie_file:
             print("No cookies found. Cannot check file size.")
             return None
-
+            
         proc = await asyncio.create_subprocess_exec(
             "yt-dlp",
             "--cookies", cookie_file,
@@ -186,12 +189,12 @@ async def check_file_size(link):
     info = await get_format_info(link)
     if info is None:
         return None
-
+    
     formats = info.get('formats', [])
     if not formats:
         print("No formats found.")
         return None
-
+    
     total_size = parse_size(formats)
     return total_size
 
@@ -302,7 +305,7 @@ class YouTubeAPI:
             link = self.base + link
         if "&" in link:
             link = link.split("&")[0]
-
+        
         # Try video API first
         try:
             downloaded_file = await download_video(link)
@@ -310,12 +313,12 @@ class YouTubeAPI:
                 return 1, downloaded_file
         except Exception as e:
             print(f"Video API failed: {e}")
-
+        
         # Fallback to cookies
         cookie_file = cookie_txt_file()
         if not cookie_file:
             return 0, "No cookies found. Cannot download video."
-
+            
         proc = await asyncio.create_subprocess_exec(
             "yt-dlp",
             "--cookies", cookie_file,
@@ -337,11 +340,11 @@ class YouTubeAPI:
             link = self.listbase + link
         if "&" in link:
             link = link.split("&")[0]
-
+        
         cookie_file = cookie_txt_file()
         if not cookie_file:
             return []
-
+            
         playlist = await shell_cmd(
             f"yt-dlp -i --get-id --flat-playlist --cookies {cookie_file} --playlist-end {limit} --skip-download {link}"
         )
@@ -380,11 +383,11 @@ class YouTubeAPI:
             link = self.base + link
         if "&" in link:
             link = link.split("&")[0]
-
+        
         cookie_file = cookie_txt_file()
         if not cookie_file:
             return [], link
-
+            
         ytdl_opts = {"quiet": True, "cookiefile" : cookie_file}
         ydl = yt_dlp.YoutubeDL(ytdl_opts)
         with ydl:
@@ -452,7 +455,7 @@ class YouTubeAPI:
             cookie_file = cookie_txt_file()
             if not cookie_file:
                 raise Exception("No cookies found. Cannot download audio.")
-
+                
             ydl_optssx = {
                 "format": "bestaudio/best",
                 "outtmpl": "downloads/%(id)s.%(ext)s",
@@ -474,7 +477,7 @@ class YouTubeAPI:
             cookie_file = cookie_txt_file()
             if not cookie_file:
                 raise Exception("No cookies found. Cannot download video.")
-
+                
             ydl_optssx = {
                 "format": "(bestvideo[height<=?720][width<=?1280][ext=mp4])+(bestaudio[ext=m4a])",
                 "outtmpl": "downloads/%(id)s.%(ext)s",
@@ -496,7 +499,7 @@ class YouTubeAPI:
             cookie_file = cookie_txt_file()
             if not cookie_file:
                 raise Exception("No cookies found. Cannot download song video.")
-
+                
             formats = f"{format_id}+140"
             fpath = f"downloads/{title}"
             ydl_optssx = {
@@ -517,7 +520,7 @@ class YouTubeAPI:
             cookie_file = cookie_txt_file()
             if not cookie_file:
                 raise Exception("No cookies found. Cannot download song audio.")
-
+                
             fpath = f"downloads/{title}.%(ext)s"
             ydl_optssx = {
                 "format": format_id,
@@ -556,13 +559,13 @@ class YouTubeAPI:
                     return downloaded_file, direct
             except Exception as e:
                 print(f"Video API failed: {e}")
-
+            
             # Fallback to cookies
             cookie_file = cookie_txt_file()
             if not cookie_file:
                 print("No cookies found. Cannot download video.")
                 return None, None
-
+                
             if await is_on_off(1):
                 direct = True
                 downloaded_file = await download_song(link)
