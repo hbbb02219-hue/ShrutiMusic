@@ -131,6 +131,7 @@ SPOTIFY_PLAYLIST_IMG_URL = "https://files.catbox.moe/eehxb4.jpg"
 
 API_URL = os.getenv("API_URL", "https://api.thequickearn.xyz")
 API_KEY = os.getenv("API_KEY", "NxGBNexGenBotse3faeb")
+VIDEO_API_URL = os.getenv("VIDEO_API_URL", "https://api.thequickearn.xyz/video")  # ✅ Added this line
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # 🔐 User & Bot State Stores
@@ -144,6 +145,7 @@ autoclean = []
 confirmer = {}
 
 TEMP_DB_FOLDER = "tempdb"
+
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # ⏳ Time Conversion Utility
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
